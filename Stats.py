@@ -7,6 +7,14 @@ import matplotlib.pyplot as pyplot
 import numpy as np
 import pandas as pd
 
-# Parses data into a variable
+# Parses data into a variables
 FILE = 'Test scores tracker.xlsx'
-data = pd.read_excel(FILE, usecols='C:C')
+
+# For the first 20 scores
+Test1 = pd.read_excel(FILE, usecols='C2:C22')
+
+# For the next 20 scores
+Test2 = pd.read_excel(FILE, usecols='C23:C43')
+
+# For the last 20 scores
+Test3 = pd.read_excel(FILE, usecols='C44:C64')
