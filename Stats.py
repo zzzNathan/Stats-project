@@ -8,12 +8,17 @@ import numpy as np
 import pandas as pd
 from collections import Counter
 
-# Parses data into a variables
+# Get relevant data about the spreadsheet
 FILE        = 'MATHS Y8 EOU Tests Tracker 2023-24 - Copy.xlsx'
 SHEET_NAME  = 'Year 8'
-Unit_1_data = pd.read_excel( FILE,SHEET_NAME,usecols='X',skiprows=122 )[:31]
-Unit_2_data = pd.read_excel( FILE,SHEET_NAME,usecols='Z',skiprows=122 )[:31]
-Unit_3_data = pd.read_excel( FILE,SHEET_NAME,usecols='AB',skiprows=122 )[:31]
+COL1        = 'X'
+COL2        = 'Z'
+COL3        = 'AB'
+
+# Parses excel data into a pandas dataframe
+Unit_1_data = pd.read_excel( FILE,SHEET_NAME,usecols=COL1,skiprows=122 )[:31]
+Unit_2_data = pd.read_excel( FILE,SHEET_NAME,usecols=COL2,skiprows=122 )[:31]
+Unit_3_data = pd.read_excel( FILE,SHEET_NAME,usecols=COL3,skiprows=122 )[:31]
 
 # Gets data and parses into a list
 def GetData( df ):
@@ -25,11 +30,15 @@ def GetData( df ):
     return result
 
 # Easily plot data onto a frequency bar chart
-def PlotData( data ):
+def PlotData( data,name ):
+
+    # Get mean, sample standard deviation and variance
+    mean = round( np.mean(data),2 )
+    SD   = round( np.std(data, ddof=1),2 )
+    var  = round( np.var(data, ddof=1),2 ) 
 
     # Get x and y axis
-    print(data)
-    data   = sorted([(score,freq) for score,freq in  Counter(data).items() ])
+    data   = sorted([ (score,freq) for score,freq in Counter(data).items() ])
     X_axis = [ round(score,2) for score,freq in data ]
     Y_axis = [ freq for score,freq in data ]
 
@@ -37,8 +46,12 @@ def PlotData( data ):
     plt.bar( X_axis,Y_axis,width = 0.03 )
     plt.xlabel( 'Scores (decimal)' )
     plt.ylabel( 'Frequency' )
-    plt.title( 'Test results' )
+    plt.title( f'Test: {name} results' )
 
+    # Show measures of location & spread
+    print( f'Test: {name} Mean = {mean} | S.D. = {SD} | Variance = {var}' )
+
+    # Show graph
     plt.show()
 
 # Gets a random sample of 20 scores from data
@@ -56,8 +69,11 @@ def GetSample( df ):
     
     return sample
 
-PlotData( GetSample(Unit_1_data) )
+# Driver code
+if __name__ == '__main__':
 
-PlotData( GetSample(Unit_2_data) )
+    PlotData( GetSample(Unit_1_data),1 )
 
-PlotData( GetSample(Unit_3_data) )
+    PlotData( GetSample(Unit_2_data),2 )
+
+    PlotData( GetSample(Unit_3_data),3 )
