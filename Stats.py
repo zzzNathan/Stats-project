@@ -2,7 +2,7 @@
 
 # Data visualisation for my school statistics project
 # --------------------------------------------------- 
-
+from math import floor
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
@@ -21,7 +21,7 @@ Unit_2_data = pd.read_excel( FILE,SHEET_NAME,usecols=COL2,skiprows=122 )[:31]
 Unit_3_data = pd.read_excel( FILE,SHEET_NAME,usecols=COL3,skiprows=122 )[:31]
 
 # Gets data and parses into a list
-def GetData( df ):
+def GetData(df) :
 
     result = []
     for row in range( df.shape[0] ):
@@ -30,12 +30,17 @@ def GetData( df ):
     return result
 
 # Easily plot data onto a frequency bar chart
-def PlotData( data,name ):
+def PlotData(data, name):
 
     # Get mean, sample standard deviation and variance
+    n    = len(data)
+    data = sorted(data)
     mean = round( np.mean(data),2 )
     SD   = round( np.std(data, ddof=1),2 )
     var  = round( np.var(data, ddof=1),2 ) 
+    Q_1  = data[ floor(0.25*(n+1)) ]
+    Q_3  = data[ floor(0.75*(n+1)) ]
+    IQR  = Q_3 - Q_1
 
     # Get x and y axis
     data   = sorted([ (score,freq) for score,freq in Counter(data).items() ])
@@ -50,22 +55,23 @@ def PlotData( data,name ):
 
     # Show measures of location & spread
     print( f'Test: {name} Mean = {mean} | S.D. = {SD} | Variance = {var}' )
+    print( f'Test: {name} Q1 = {Q_1} | IQR = {IQR} | Q3 = {Q_3}' )
 
     # Show graph
     plt.show()
 
 # Gets a random sample of 20 scores from data
-def GetSample( df ):
+def GetSample(df):
 
-    data   = GetData( df )
+    data   = GetData(df)
     sample = []
 
     # Iterate 20 times each time getting a random score from the data set
     for i in range(20):
 
-        score = np.random.choice( data )
-        sample.append( score )
-        data.remove( score )
+        score = np.random.choice(data)
+        sample.append(score)
+        data.remove(score)
     
     return sample
 
