@@ -11,3 +11,5 @@ results provided by my school, the project runs in python 3.11 and has a few dep
  
 ## Features
  - Will take in the given excel file and plot the data on 3 seperate scatter graphs for better data visualisation
+
+___// This repo is an archive.___
